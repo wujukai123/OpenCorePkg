@@ -12,7 +12,7 @@ env:
 
 jobs:
   analyze-scripts:
-    name: Analyze Scripts
+    name: Scripts
     runs-on: macos-latest
     env:
       JOB_TYPE: ANALYZE
@@ -62,7 +62,7 @@ jobs:
           if [ "$(git diff ${File})" != '' ]; then echo "Not in Xcode style or not in alphabetical order!!"; exit 1 ; fi
 
   analyze-docs-linux:
-    name: Analyze Documentation
+    name: Documentation
     runs-on: ubuntu-latest
     if: github.repository_owner == 'acidanthera' && github.ref_name == 'master'
     steps:
@@ -77,7 +77,7 @@ jobs:
         run: ./Docs/BuildDocs.tool --check-docs
 
   analyze-coverity:
-    name: Analyze Coverity
+    name: Coverity
     runs-on: ubuntu-latest
     env:
       JOB_TYPE: COVERITY

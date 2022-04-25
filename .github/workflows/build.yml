@@ -16,7 +16,7 @@ env:
 
 jobs:
   build-macos:
-    name: Build macOS XCODE5
+    name: macOS XCODE5
     runs-on: macos-latest
     env:
       JOB_TYPE: BUILD
@@ -60,7 +60,7 @@ jobs:
           file_glob: true
 
   build-linux-clangpdb-gcc5:
-    name: Build Linux CLANGPDB/GCC5
+    name: Linux CLANGPDB/GCC5
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -88,7 +88,7 @@ jobs:
           path: Binaries/*.zip
 
   build-linux-clangdwarf:
-    name: Build Linux CLANGDWARF
+    name: Linux CLANGDWARF
     runs-on: ubuntu-latest
     env:
       TOOLCHAINS: CLANGDWARF
@@ -111,7 +111,7 @@ jobs:
       - run: ./build_duet.tool
       - run: ./build_oc.tool
 
-      - name: Build Docs
+      - name: Docs
         run: |
           abort() { tail -200 log.txt ; exit 1 ; }
           doxygen Doxyfile &> log.txt || abort
@@ -125,7 +125,7 @@ jobs:
           path: Binaries/*.zip
 
   build-windows:
-    name: Build Windows VS2019
+    name: Windows VS2019
     runs-on: windows-2019
     env:
       HAS_OPENSSL_BUILD: 0
