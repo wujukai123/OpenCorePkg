@@ -27,7 +27,8 @@ if [ "$(uname)" = "Linux" ]; then
   DIR="$IMAGE.d"
   NBD=/dev/nbd0
 
-  rm -rf "$DIR" "$IMAGE"
+  rm -rf "$DIR"
+  rm -f "$IMAGE" newbs origbs
   mkdir -p "$DIR"
 
   # Create 200M MS-DOS disk image with 1 FAT32 partition
@@ -55,7 +56,7 @@ END
   cp -v boot1f32 newbs
   dd if=origbs of=newbs skip=3 seek=3 bs=1 count=87 conv=notrunc
   dd if=/dev/random of=newbs skip=496 seek=496 bs=1 count=14 conv=notrunc
-  dd if=newbs of=${NBD}p1
+  dd if=newbs of=${NBD}p1 conv=notrunc
 
   # Copy boot and ESP into FAT32 file system
   mount ${NBD}p1 "$DIR"
