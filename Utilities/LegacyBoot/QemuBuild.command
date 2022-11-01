@@ -23,7 +23,7 @@ if [ ! -d ROOT ]; then
 fi
 
 if [ "$(uname)" = "Linux" ]; then
-  IMAGE=OpenCore.qcow2
+  IMAGE=OpenCore.raw
   DIR="$IMAGE.d"
   NBD=/dev/nbd0
 
@@ -31,10 +31,10 @@ if [ "$(uname)" = "Linux" ]; then
   rm -f "$IMAGE" newbs origbs
   mkdir -p "$DIR"
 
-  # Create 200M MS-DOS disk image with 1 FAT32 partition
+  # Create 200M MS-DOS bootable disk image with 1 FAT32 partition
   modprobe nbd
-  qemu-img create -f qcow2 "$IMAGE" 200M
-  qemu-nbd -c "$NBD" "$IMAGE"
+  qemu-img create -f raw "$IMAGE" 200M
+  qemu-nbd -f raw -c "$NBD" "$IMAGE"
   fdisk "$NBD" << END
   o
   n
@@ -43,30 +43,33 @@ if [ "$(uname)" = "Linux" ]; then
   2048
   409599
   t
-  c
+  b
+  a
   w
 END
   mkfs.vfat -F32 ${NBD}p1
 
-  # Copy boot0 into MBR
-  dd if=boot0 of="$NBD" bs=1 count=446 conv=notrunc
-
-  # Copy boot1f32 into FAT32 Boot Record Information
-  dd if=${NBD}p1 count=1 of=origbs
+  # Copy boot1f32 into FAT32 Boot Record
+  dd if=${NBD}p1 of=origbs count=1
   cp -v boot1f32 newbs
   dd if=origbs of=newbs skip=3 seek=3 bs=1 count=87 conv=notrunc
   dd if=/dev/random of=newbs skip=496 seek=496 bs=1 count=14 conv=notrunc
   dd if=newbs of=${NBD}p1 conv=notrunc
 
-  # Copy boot and ESP into FAT32 file system
+  # Copy boot file and ESP contents into FAT32 file system
   mount ${NBD}p1 "$DIR"
   cp -v boot "$DIR"
   cp -rv ROOT/* "$DIR"
 
+  # Remove temporary files
   sleep 2
   umount -R "$DIR"
   qemu-nbd -d "$NBD"
   rm -r "$DIR"
+  rm newbs origbs
+
+  # Copy boot0 into MBR
+  dd if=boot0 of="$IMAGE" bs=1 count=446 conv=notrunc
 fi
 
 if [ "$(uname)" = "Darwin" ]; then
