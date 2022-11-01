@@ -70,9 +70,7 @@ END
 
   # Copy boot0 into MBR
   dd if=boot0 of="$IMAGE" bs=1 count=446 conv=notrunc
-fi
-
-if [ "$(uname)" = "Darwin" ]; then
+elif [ "$(uname)" = "Darwin" ]; then
   rm -f OpenCore.dmg.sparseimage OpenCore.RO.raw OpenCore.RO.dmg
   hdiutil create -size 200m  -layout "UNIVERSAL HD"  -type SPARSE  -o OpenCore.dmg
   newDevice=$(hdiutil attach -nomount OpenCore.dmg.sparseimage |head -n 1 |  awk  '{print $1}')
