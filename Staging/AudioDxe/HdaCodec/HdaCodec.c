@@ -1384,6 +1384,8 @@ HdaCodecEnableWidgetPath (
         return Status;
       }
 
+      gBS->Stall (MS_TO_MICROSECONDS (2000));
+
       // If EAPD, enable.
       if (HdaWidget->PinCapabilities & HDA_PARAMETER_PIN_CAPS_EAPD) {
         // Get current EAPD setting.
@@ -1488,6 +1490,8 @@ HdaCodecEnableWidgetPath (
       if (EFI_ERROR (Status)) {
         return Status;
       }
+
+      gBS->Stall (MS_TO_MICROSECONDS (2000));
     }
 
     // If there are input amps, mute all but the upstream.
@@ -1528,6 +1532,8 @@ HdaCodecEnableWidgetPath (
           }
         }
       }
+
+      gBS->Stall (MS_TO_MICROSECONDS (2000));
     }
 
     // If there is more than one connection, select our upstream.
@@ -1574,6 +1580,8 @@ HdaCodecEnableWidgetPath (
       if (EFI_ERROR (Status)) {
         return Status;
       }
+
+      gBS->Stall (MS_TO_MICROSECONDS (2000));
     }
 
     // Move to upstream widget.
