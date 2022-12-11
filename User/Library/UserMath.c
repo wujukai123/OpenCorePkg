@@ -126,9 +126,9 @@ SwapBytes64 (
   UINT64  Operand
   )
 {
-#ifdef WIN32
+ #ifdef WIN32
   return _byteswap_uint64 (Operand);
-#else
+ #else
   return __builtin_bswap64 (Operand);
-#endif
+ #endif
 }
