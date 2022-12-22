@@ -116,15 +116,15 @@ package() {
     done
 
     # Mark binaries to be recognisable by OcBootManagementLib.
-    bootsig="${selfdir}/Library/OcBootManagementLib/BootSignature.bin"
-    efiOCBMs=(
-      "Bootstrap.efi"
-      "OpenCore.efi"
-      )
-    for efiOCBM in "${efiOCBMs[@]}"; do
-      dd if="${bootsig}" \
-         of="${arch}/${efiOCBM}" seek=64 bs=1 count=56 conv=notrunc || exit 1
-    done
+    # bootsig="${selfdir}/Library/OcBootManagementLib/BootSignature.bin"
+    # efiOCBMs=(
+    #   "Bootstrap.efi"
+    #   "OpenCore.efi"
+    #   )
+    # for efiOCBM in "${efiOCBMs[@]}"; do
+    #   dd if="${bootsig}" \
+    #      of="${arch}/${efiOCBM}" seek=64 bs=1 count=56 conv=notrunc || exit 1
+    # done
 
     # copy OpenCore main program.
     cp "${arch}/OpenCore.efi" "${dstdir}/${arch}/EFI/OC" || exit 1
